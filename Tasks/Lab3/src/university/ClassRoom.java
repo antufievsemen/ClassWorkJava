@@ -55,8 +55,6 @@ public class ClassRoom extends Thread {
 
   @Override
   public void run() {
-    GeneratorOfStudents generator = new GeneratorOfStudents();
-    generator.start();
     while (!deque.isEmpty()) {
       if (hasStudent(deque, "Math")) {
         Student mathStudent = getStudent(deque, "Math");
