@@ -1,54 +1,42 @@
 package generator;
 
-import university.ClassRoom;
+import studentsqueue.ClassRoom;
 import university.Student;
-
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GeneratorOfStudents extends Thread{
 
   public static int labsCount = 0;
   public static String subjectName = "";
 
-  private static int generateCountOfLabs(){
+  public GeneratorOfStudents(){
+    start();
+  }
 
-    Random intRandom = new Random();
-    int number = Math.abs(intRandom.nextInt());
-    if(number % 3 == 0){
-      return 10;
-    }
-
-    if(number % 3 == 1){
-      return 20;
-    }
-
-    if(number % 3 == 2){
-      return 100;
+  private int generateCountOfLabs(){
+    int number = Math.abs(ThreadLocalRandom.current().nextInt());
+    switch(number % 3){
+      case 0 : return 10;
+      case 1 : return 20;
+      case 2 : return 100;
     }
 
     return -1;
   }
 
-  private static String generateSubjectName(){
-    Random intRandom = new Random();
-    int number = Math.abs(intRandom.nextInt());
-    if(number % 3 == 0){
-      return "Math";
-    }
-
-    if(number % 3 == 1){
-      return "Fizik";
-    }
-
-    if(number % 3 == 2){
-      return "OOP";
+  private String generateSubjectName(){
+    int number = Math.abs(ThreadLocalRandom.current().nextInt());
+    switch(number % 3){
+      case 0 : return "Fizik";
+      case 1 : return "Math";
+      case 2 : return "OOP";
     }
 
     return null;
   }
 
-  public static Student generateStudent(){
-    if(labsCount == 0 && subjectName.equals("")){
+  public Student generateStudent(){
+    if(labsCount == 0 && subjectName.equals("")) {
       return new Student(generateSubjectName(), generateCountOfLabs());
     }
     return new Student(subjectName, labsCount);
@@ -56,8 +44,14 @@ public class GeneratorOfStudents extends Thread{
 
   @Override
   public void run(){
-    while(ClassRoom.deque.size() != 20){
-      ClassRoom.deque.addLast(generateStudent());
+   // while(!Thread.currentThread().isInterrupted()){
+    while(ClassRoom.queueOfStudents.size() != 10){
+      try {
+        ClassRoom.queueOfStudents.put(generateStudent());
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
     }
+    interrupt();
   }
 }
