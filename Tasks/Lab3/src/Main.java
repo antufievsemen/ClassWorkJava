@@ -29,6 +29,11 @@ public class Main {
     FizikRobot.setName("Fizik");
     FizikRobot.start();
     while (!ClassRoom.queueOfStudents.isEmpty()) {
+      try {
+        Thread.sleep(500);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
       if (MathRobot.hasStudent("Math", ClassRoom.queueOfStudents)) {
         Student studentTakeExams = MathRobot.getStudent("Math", ClassRoom.queueOfStudents);
         ClassRoom.queueOfStudents.remove(studentTakeExams);
