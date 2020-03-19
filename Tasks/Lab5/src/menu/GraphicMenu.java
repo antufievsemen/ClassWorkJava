@@ -4,6 +4,7 @@ import buttons.CategoryRadioButtons;
 import buttons.ExitButton;
 import buttons.ResultButton;
 import database.products.ProductDataBase;
+import javabean.FaceBean;
 import textfields.AttributeTextField;
 
 import javax.swing.JFrame;
@@ -17,11 +18,12 @@ public class GraphicMenu {
 
   private JFrame jFrameOfMenu;
   private JPanel jPanelOfMenu;
-  public CategoryRadioButtons categoryRadioButtons;
-  public AttributeTextField nameField;
-  public AttributeTextField priceField;
-  public ResultButton resultButton;
-  public ExitButton exitButton;
+  private CategoryRadioButtons categoryRadioButtons;
+  private AttributeTextField nameField;
+  private AttributeTextField priceField;
+  private ResultButton resultButton;
+  private ExitButton exitButton;
+  private FaceBean faceBean;
 
 
   public GraphicMenu(){
@@ -37,6 +39,8 @@ public class GraphicMenu {
     exitButton = new ExitButton(jPanelOfMenu, 0, 15);
     resultButton = new ResultButton(jPanelOfMenu, 15, 15, categoryRadioButtons.getRadioButtons(), nameField, priceField, productDataBase.getConnectionToBD());
     jPanelOfMenu.revalidate();
+    faceBean = new FaceBean();
+    faceBean.setMouthWidth(50);
   }
 
   public JPanel getjPanelOfMenu() {
