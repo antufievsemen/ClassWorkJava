@@ -1,17 +1,18 @@
 package generator;
 
+import lessons.Lesson;
 import studentsqueue.ClassRoom;
 import university.Student;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneratorOfStudents extends Thread {
+  private int countOfStudent;
+  private ClassRoom classRoom;
 
-  public static int labsCount = 0;
-  public static String subjectName = "";
-
-  public GeneratorOfStudents() {
+  public GeneratorOfStudents(int count, ClassRoom classRoom) {
+    countOfStudent = count;
+    this.classRoom = classRoom;
     start();
   }
 
@@ -29,34 +30,31 @@ public class GeneratorOfStudents extends Thread {
     return -1;
   }
 
-  private String generateSubjectName() {
+  private Lesson generateSubjectName() {
     int number = Math.abs(ThreadLocalRandom.current().nextInt());
     switch (number % 3) {
       case 0:
-        return "Fizik";
+        return Lesson.Fizik;
       case 1:
-        return "Math";
+        return Lesson.Math;
       case 2:
-        return "OOP";
+        return Lesson.OOP;
     }
 
     return null;
   }
 
-  public Student generateStudent() {
-    if (labsCount == 0 && subjectName.equals("")) {
-      return new Student(generateSubjectName(), generateCountOfLabs());
-    }
-    return new Student(subjectName, labsCount);
+  private Student generateStudent() {
+    return new Student(generateSubjectName(), generateCountOfLabs());
   }
 
   @Override
   public void run() {
-    AtomicInteger i = new AtomicInteger(0);
-    while(i.get() <= 30) {
-      i.incrementAndGet();
+    int i = 0;
+    while(i++ <= countOfStudent) {
       try {
-        ClassRoom.queueOfStudents.put(generateStudent());
+        Student student = generateStudent();
+        classRoom.queueOfStudents.put(student);
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

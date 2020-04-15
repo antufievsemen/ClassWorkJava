@@ -6,6 +6,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ClassRoom {
-  public static BlockingQueue<Student> queueOfStudents = new LinkedBlockingQueue<>();
+  public BlockingQueue<Student> queueOfStudents;
+
+  public ClassRoom () {
+    queueOfStudents = new LinkedBlockingQueue<>();
+  }
+
 
 }
